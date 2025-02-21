@@ -5,7 +5,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth.models import AnonymousUser
 
 from .models import Message, Room
-from .serializers import MessageSerializer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
