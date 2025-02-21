@@ -1,6 +1,7 @@
 from django.db import models
-from accounts.models import CustomUser
 from django.utils.translation import gettext_lazy as _
+
+from accounts.models import CustomUser
 
 
 # Create your models here.
@@ -19,6 +20,10 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        return super().save(*args, **kwargs)
 
 
 class Message(models.Model):
