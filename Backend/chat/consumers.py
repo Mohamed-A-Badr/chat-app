@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from .models import Message, Room
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class ChatGroupConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.name = self.scope["url_route"]["kwargs"]["group_name"]
         self.group_name = f"chat_{self.name}"
@@ -66,18 +66,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def list_past_message(self):
-        return list(Message.objects.filter(group=self.group).order_by("-sent_at"))
+        return list(Message.objects.filter(group=self.group).order_by("-timestamp"))
 
     async def get_history(self):
         messages = await self.list_past_message()
         messages.reverse()
 
-        print(MessageSerializer(messages[0]).data)
         history = [
             {
                 "message": msg.content,
                 "sender": await database_sync_to_async(lambda: msg.sender.username)(),
-                "timestamp": msg.sent_at.strftime("%Y-%m-%d %H:%M:%S"),
+                "timestamp": msg.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
                 "group": await database_sync_to_async(lambda: msg.group.name)(),
             }
             for msg in messages
