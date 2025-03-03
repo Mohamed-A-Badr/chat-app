@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Message, Room
+from .models import Message, Room, PrivateChat
 
 
 # Register your models here.
@@ -22,6 +22,18 @@ class MessageAdmin(admin.ModelAdmin):
         "id",
         "content",
         "sender",
-        "sent_at",
+        "timestamp",
         "group",
     )
+
+
+@admin.register(PrivateChat)
+class PrivateChatAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user_1",
+        "user_2",
+        "created_at",
+    )
+    list_filter = ("created_at",)
+    
