@@ -24,7 +24,13 @@ class MessageAdmin(admin.ModelAdmin):
         "sender",
         "timestamp",
         "group",
+        "chat",
     )
+    list_filter = ("timestamp", "group", "chat")
+
+    def truncated_content(self, obj):
+        return obj.content[:50] + "..." if len(obj.content) > 50 else obj.content
+    truncated_content.short_description = "Content"
 
 
 @admin.register(PrivateChat)
@@ -36,4 +42,3 @@ class PrivateChatAdmin(admin.ModelAdmin):
         "created_at",
     )
     list_filter = ("created_at",)
-    
