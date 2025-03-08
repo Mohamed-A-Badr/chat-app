@@ -40,3 +40,12 @@ class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
     default_error_messages = {"bad_token": ("Token is expired or invalid")}
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = (
+            "username",
+            "email",
+        )
