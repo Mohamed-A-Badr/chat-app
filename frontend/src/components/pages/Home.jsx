@@ -12,40 +12,55 @@ const Home = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             const token = localStorage.getItem('accessToken');
-
-            if (!token) {
-                // Refresh token
-                try {
-                    const response = await axios.post('http://localhost:8000/auth/refresh/', {
-                        refresh: localStorage.getItem('refreshToken')
-                    });
-                    localStorage.setItem('accessToken', response.data.access);
-                    localStorage.setItem('refreshToken', response.data.refresh);
-                } catch (error) {
-                    console.error('Error refreshing token:', error);
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    navigate('/login');
-                    return;
-                }
+            const refreshToken = localStorage.getItem('refreshToken');
+            
+            if (!token && !refreshToken) {
+                // No tokens available, redirect to login
+                navigate('/login');
+                return;
             }
 
             try {
+                // Try to fetch user profile with current token
                 const response = await axios.get('http://localhost:8000/auth/me/', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
+                
                 setUser(response.data);
-                console.log(response.data)
             } catch (error) {
-                console.error('Error fetching user profile:', error);
-
-                // If token is invalid or expired, redirect to login
+                // If token is invalid, try to refresh
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
+                    try {
+                        const refreshResponse = await axios.post('http://localhost:8000/auth/refresh/', {
+                            refresh: refreshToken
+                        });
+
+                        // Update tokens
+                        localStorage.setItem('accessToken', refreshResponse.data.access);
+                        // Removed the line that updated the refresh token
+                        
+                        // Retry fetching user profile with new token
+                        const userResponse = await axios.get('http://localhost:8000/auth/me/', {
+                            headers: {
+                                'Authorization': `Bearer ${refreshResponse.data.access}`
+                            }
+                        });
+
+                        setUser(userResponse.data);
+                    } catch (refreshError) {
+                        // Log the refresh error
+                        console.error('Token refresh failed:', refreshError);
+
+                        // Refresh failed, clear tokens and redirect to login
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                        navigate('/login');
+                    }
+                } else {
+                    // Other unexpected error
+                    console.error('Error fetching user profile:', error);
                     navigate('/login');
                 }
             }
