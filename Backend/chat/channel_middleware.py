@@ -28,23 +28,23 @@ class JWTAuthMiddleware(BaseMiddleware):
         try:
             # Check multiple sources for token
             token = None
-            
+
             # 1. Check query string
             query_params = parse_qs(scope["query_string"].decode("utf-8"))
             if query_params and "token" in query_params:
                 token = query_params["token"][0]
-            
+
             # 2. Check headers (Postman WebSocket style)
             if not token and "headers" in scope:
                 for name, value in scope["headers"]:
-                    if name.decode('utf-8').lower() == 'authorization':
+                    if name.decode("utf-8").lower() == "authorization":
                         # Assumes "Bearer <token>" format
-                        token = value.decode('utf-8').split(' ')[-1]
-            
+                        token = value.decode("utf-8").split(" ")[-1]
+
             # 3. Check connection parameters
             if not token and "token" in scope:
                 token = scope["token"]
-            
+
             if not token:
                 raise ValueError("No token found")
 
@@ -56,10 +56,9 @@ class JWTAuthMiddleware(BaseMiddleware):
             InvalidSignatureError,
             ExpiredSignatureError,
             DecodeError,
-            ValueError
+            ValueError,
         ):
             scope["user"] = AnonymousUser()
-            print(f"WebSocket Authentication Failed: No valid token found")
 
         return await self.inner(scope, receive, send)
 
