@@ -25,10 +25,16 @@ const Login = () => {
     Axios.post(url, {
       email: data.email,
       password: data.password,
-    }).then((res) => {
-      console.log(res.data, res.status);
-      navigate("/");
-    });
+    })
+      .then((res) => {
+        console.log(res.status);
+        localStorage.setItem("accessToken", res.data.access);
+        localStorage.setItem("refreshToken", res.data.refresh);
+        navigate("/");
+      })
+      .catch((err) => {
+        alert(err.response.data["detail"]);
+      });
   }
 
   return (
@@ -52,7 +58,7 @@ const Login = () => {
         <Button type="submit" action="Login" />
         <hr />
         <p>
-          Not a member? <a href="#">Register</a>
+          Not a member? <a href="/register">Register</a>
         </p>
       </form>
     </div>
