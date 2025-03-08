@@ -1,0 +1,10 @@
+.chat-container{
+    width: 50%;
+    height: 600px;
+    background-color: red;
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
