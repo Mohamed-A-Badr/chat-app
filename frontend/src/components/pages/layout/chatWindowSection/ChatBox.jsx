@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Message from './Message'
 import "./ChatBox.css"
 
 const ChatBox = () => {
     const [messages, setMessages] = useState([]);
     const currentUsername = localStorage.getItem("username");
+    const chatBoxRef = useRef(null);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
         // Function to handle WebSocket messages
@@ -59,22 +69,18 @@ const ChatBox = () => {
         };
 
         // Add event listeners
-        
-        
         window.addEventListener('websocket-message', handleWebSocketMessage);
         window.addEventListener("group-websocket-message", handleWebSocketMessage);
 
         // Cleanup event listeners
         return () => {
-            
-            
             window.removeEventListener('websocket-message', handleWebSocketMessage);
             window.removeEventListener("group-websocket-message", handleWebSocketMessage);
         };
     }, []);
 
     return (
-        <div className="chat-box">
+        <div ref={chatBoxRef} className="chat-box" style={{ overflowY: 'auto' }}>
             {messages.map((message, index) => (
                 <Message 
                     key={index} 
@@ -83,6 +89,7 @@ const ChatBox = () => {
                     isCurrentUser={message.sender === currentUsername}
                 />
             ))}
+            <div ref={messagesEndRef} /> {/* This empty div will be used for scrolling */}
         </div>
     );
 };
