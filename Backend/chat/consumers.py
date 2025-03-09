@@ -60,6 +60,7 @@ class ChatGroupConsumer(AsyncWebsocketConsumer):
                 {
                     "message": message,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "sender": self.scope["user"].username,
                 }
             )
         )
@@ -156,6 +157,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 {
                     "message": message,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "sender": self.scope["user"].username,
                 }
             )
         )

@@ -4,17 +4,9 @@ import "./ChatBox.css"
 
 const ChatBox = () => {
     const [messages, setMessages] = useState([]);
-    const [currentUsername, setCurrentUsername] = useState(null);
+    const currentUsername = localStorage.getItem("username");
 
     useEffect(() => {
-        // Function to handle the websocket connection event
-        const handleWebSocketConnected = (event) => {
-            const { username } = event.detail;
-            
-            // Set the current username
-            setCurrentUsername(username);
-        };
-
         // Function to handle WebSocket messages
         const handleWebSocketMessage = (event) => {
             // Log the raw message for debugging
@@ -46,7 +38,8 @@ const ChatBox = () => {
                     const historyMessages = data.history.map(msg => ({
                         content: msg.message,
                         sender: msg.sender,
-                        timestamp: msg.timestamp
+                        timestamp: msg.timestamp,
+                        group: msg.group
                     }));
                     setMessages(historyMessages);
                 } else if (data.message) {
@@ -54,7 +47,8 @@ const ChatBox = () => {
                     const newMessage = {
                         content: data.message,
                         sender: data.sender,
-                        timestamp: data.timestamp
+                        timestamp: data.timestamp,
+                        group: data.group
                     };
                     setMessages(prevMessages => [...prevMessages, newMessage]);
                 }
@@ -65,13 +59,17 @@ const ChatBox = () => {
         };
 
         // Add event listeners
-        window.addEventListener('websocket-connected', handleWebSocketConnected);
+        
+        
         window.addEventListener('websocket-message', handleWebSocketMessage);
+        window.addEventListener("group-websocket-message", handleWebSocketMessage);
 
         // Cleanup event listeners
         return () => {
-            window.removeEventListener('websocket-connected', handleWebSocketConnected);
+            
+            
             window.removeEventListener('websocket-message', handleWebSocketMessage);
+            window.removeEventListener("group-websocket-message", handleWebSocketMessage);
         };
     }, []);
 
@@ -81,6 +79,7 @@ const ChatBox = () => {
                 <Message 
                     key={index} 
                     message={message} 
+                    sender={message.sender}
                     isCurrentUser={message.sender === currentUsername}
                 />
             ))}

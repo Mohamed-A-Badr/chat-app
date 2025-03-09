@@ -46,7 +46,7 @@ const InputBox = () => {
                 // Prepare the message payload
                 const messagePayload = JSON.stringify({
                     type: 'message',
-                    message: trimmedMessage
+                    message: trimmedMessage,
                 });
 
                 // Send the message through the WebSocket

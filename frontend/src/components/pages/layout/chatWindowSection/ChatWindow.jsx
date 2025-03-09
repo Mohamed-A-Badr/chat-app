@@ -25,7 +25,7 @@ const ChatWindow = () => {
     return (
         <div className="chat-window">
             <div className="profile">
-                <p>{username || 'Test User'}</p>
+                <p>{username || 'Chat'}</p>
             </div>
             <ChatBox />
             <InputBox />

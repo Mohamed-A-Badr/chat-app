@@ -30,6 +30,7 @@ const Home = () => {
                 });
 
                 setUser(response.data);
+                localStorage.setItem('username', response.data.username);
             } catch (error) {
                 // If token is invalid, try to refresh
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
