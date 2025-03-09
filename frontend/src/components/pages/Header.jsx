@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import Button from '../../auth/features/Button'
+import Button from '../auth/features/Button'
 import "./Header.css"
 
 const Header = ({ user }) => {
