@@ -1,19 +1,15 @@
 import React from 'react'
 import "./Message.css"
 
-const Message = () => {
+const Message = ({ message, isCurrentUser }) => {
+    const messageClass = isCurrentUser ? "message-sender" : "message-receiver";
+    
     return (
-        <>
-            <div className="message-sender">
-                <small>2020/10/11</small>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-            <div className="message-receiver">
-                <small>2020/10/11</small>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-        </>
+        <div className={messageClass}>
+            <small>{new Date(message.timestamp).toLocaleDateString()}</small>
+            <p>{message.content}</p>
+        </div>
     )
 }
 
-export default Message
+export default Message;

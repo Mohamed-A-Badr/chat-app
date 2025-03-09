@@ -42,7 +42,10 @@ const UserList = () => {
     }
 
     if (error) {
-        return <div className="users-list">Error: {error}</div>;
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+        return <div className="users-list">Error: {error}. Reloading...</div>;
     }
 
     return (
@@ -51,6 +54,7 @@ const UserList = () => {
                 <UserInfo
                     key={user.email}
                     username={user.username}
+                    id={user.id}
                 />
             ))}
         </div>
