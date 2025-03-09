@@ -1,13 +1,13 @@
 import React from 'react'
 import "./Chat.css"
-import UserList from './layout/UserList'
-import ChatWindow from './layout/ChatWindow'
+import ChatList from './layout/chatListSection/ChatList'
+import ChatWindow from './layout/chatWindowSection/ChatWindow'
 
 
 const Chat = () => {
     return (
         <main className="chat-container">
-            <UserList />
+            <ChatList />
             <ChatWindow />
         </main>
     )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Input from '../../auth/features/Input'
-import Button from '../../auth/features/Button'
+import Input from '../../../auth/features/Input'
+import Button from '../../../auth/features/Button'
 import "./InputBox.css"
 
 const InputBox = () => {
