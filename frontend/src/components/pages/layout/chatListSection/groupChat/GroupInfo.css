@@ -1,0 +1,19 @@
+.group-icon{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    height: 40px;
+    padding: 5px;
+    border-bottom: 1px solid grey;
+}
+
+.send-message{
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.send-message:hover{
+    transition: transform 0.3s;
+    transform: translateX(5px);
+}

@@ -15,3 +15,9 @@ class RoomSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Group with this name already exits")
 
         return super().validate(attrs)
+
+
+class GroupListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ("name",)

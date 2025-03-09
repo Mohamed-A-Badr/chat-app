@@ -1,12 +1,11 @@
+from typing import override
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .serializers import (
-    LogoutSerializer,
-    RegisterSerializer,
-)
+from .serializers import LogoutSerializer, RegisterSerializer, ProfileSerializer
+from .models import CustomUser
 
 
 class RegisterView(generics.GenericAPIView):
@@ -58,7 +57,31 @@ class LogoutView(generics.GenericAPIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ProfileView(generics.GenericAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
+
+
+class ListUserView(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @override
+    def get_queryset(self):
+        try:
+            users = CustomUser.objects.all().exclude(id=self.request.user.id)
+            return users
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 register = RegisterView.as_view()
 login = LoginView.as_view()
 refresh_token = RefreshTokenView.as_view()
 logout = LogoutView.as_view()
+profile = ProfileView.as_view()
+list_users = ListUserView.as_view()
