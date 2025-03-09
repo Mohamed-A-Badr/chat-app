@@ -1,10 +1,10 @@
 import React from 'react'
 import './Input.css'
 
-const Input = ({selector, onChange, value, type, name, placeholder}) => {
+const Input = ({selector, onKeyUp, onChange, value, type, name, placeholder}) => {
   return (
     <>
-        <input className={selector || ""} onChange={onChange} value={value} type={type} name={name} placeholder={placeholder}/>
+        <input className={selector || ""} onKeyUp={onKeyUp} onChange={onChange} value={value} type={type} name={name} placeholder={placeholder}/>
     </>
   )
 }

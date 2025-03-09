@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from .models import Message, Room, PrivateChat
 from accounts.models import CustomUser
 from django.db.models import Q
-
+from datetime import datetime
 import logging
 
 
@@ -55,7 +55,14 @@ class ChatGroupConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event["message"]
 
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "message": message,
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+            )
+        )
 
     @database_sync_to_async
     def save_message(self, message, user):
@@ -144,7 +151,14 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event["message"]
 
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "message": message,
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+            )
+        )
 
     @database_sync_to_async
     def save_message(self, message):

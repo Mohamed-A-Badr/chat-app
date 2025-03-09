@@ -1,8 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./UserInfo.css"
 
-const UserInfo = ({ username, id }) => {
+const UserInfo = ({ username, id, isSelected, onUserSelect }) => {
     const [socket, setSocket] = useState(null);
+
+    useEffect(() => {
+        // Listen for close WebSocket event
+        const handleCloseWebSocket = () => {
+            // Close existing socket if it exists
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.close();
+                setSocket(null);
+            }
+        };
+
+        // Add event listener for closing WebSocket
+        window.addEventListener('close-websocket', handleCloseWebSocket);
+
+        // Cleanup event listener
+        return () => {
+            window.removeEventListener('close-websocket', handleCloseWebSocket);
+            
+            // Close socket when component unmounts
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.close();
+            }
+        };
+    }, [socket]);
 
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -11,6 +35,9 @@ const UserInfo = ({ username, id }) => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             return;
         }
+
+        // Call user select handler
+        onUserSelect();
 
         try {
             const token = localStorage.getItem("accessToken");
@@ -23,10 +50,16 @@ const UserInfo = ({ username, id }) => {
                 setSocket(newSocket);
                 
                 // Dispatch a custom event with the username
-                const event = new CustomEvent('websocket-connected', { 
+                const connectedEvent = new CustomEvent('websocket-connected', { 
                     detail: { username: username } 
                 });
-                window.dispatchEvent(event);
+                window.dispatchEvent(connectedEvent);
+
+                // Dispatch a custom event with the socket
+                const socketEvent = new CustomEvent('socket-created', {
+                    detail: { socket: newSocket }
+                });
+                window.dispatchEvent(socketEvent);
             });
 
             // Listen for messages
@@ -65,7 +98,10 @@ const UserInfo = ({ username, id }) => {
     };
 
     return (
-        <div className="user-icon">
+        <div 
+            className={`user-icon ${isSelected ? 'selected' : ''}`}
+            onClick={onUserSelect}
+        >
             <p>{username}</p>
             <a
                 className="send-message"
