@@ -42,25 +42,27 @@ class ChatGroupConsumer(AsyncWebsocketConsumer):
         message = json_text["message"]
         user = self.scope["user"]
 
-        await self.save_message(message, user)
+        self.message_instance = await self.save_message(message, user)
 
         await self.channel_layer.group_send(
             self.group_name,
             {
                 "type": "chat.message",
                 "message": message,
+                "sender_username": user.username,
             },
         )
 
     async def chat_message(self, event):
         message = event["message"]
+        sender_username = event.get("sender_username", "Unknown")
 
         await self.send(
             text_data=json.dumps(
                 {
                     "message": message,
+                    "sender": sender_username,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "sender": self.scope["user"].username,
                 }
             )
         )
@@ -146,18 +148,20 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             {
                 "type": "chat.message",
                 "message": message,
+                "sender_username": self.user.username,
             },
         )
 
     async def chat_message(self, event):
         message = event["message"]
+        sender_username = event.get("sender_username", "Unknown")
 
         await self.send(
             text_data=json.dumps(
                 {
                     "message": message,
+                    "sender": sender_username,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "sender": self.scope["user"].username,
                 }
             )
         )
