@@ -4,6 +4,8 @@
 
 A full-stack real-time chat application built with Django and React, featuring secure authentication, WebSocket support, and modern web technologies.
 
+[![Watch the video](https://drive.google.com/file/d/1cYeG715FwKYGxJRcmwAa5QgL0ItP5tQI/view?usp=sharing)](https://drive.google.com/file/d/1ZGHFta0bDX-xGfc8RHqNrhsejPhnyJbt/view?usp=sharing)
+
 ## 🚀 Features
 
 - Real-time messaging using WebSocket
@@ -40,6 +42,20 @@ A full-stack real-time chat application built with Django and React, featuring s
 ## 🔧 Local Setup
 
 ### Backend Setup
+
+### 1. Docker Setup
+
+1. Clone the repository
+2. Run Docker engine on you machine
+3. Run Docker Compose
+
+```bash
+docker compose up --build
+or
+docker compose up -d --build  # running containers in background
+```
+
+### 2. Local Setup
 
 1. Clone the repository
 2. Create a virtual environment
@@ -101,11 +117,15 @@ npm run dev
 
 ## 🚦 Environment Variables
 
-Create a `.env` file in the Backend directory with:
+Update the environment values in `docker-compose.yml` file with your:
 
-- `SECRET_KEY`
-- `DEBUG`
-- `ALLOWED_HOSTS`
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `POSTGRES_HOST`
+- `POSTGRES_PORT`
+- `REDIS_HOST`
+- `REDIS_PORT`
 
 ## 🐛 Error Tracking
 

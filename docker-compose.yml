@@ -8,7 +8,6 @@ services:
     volumes:
       - ./Backend:/app
     environment:
-      - DEBUG=1
       - POSTGRES_DB=chatapp
       - POSTGRES_USER=chatappuser
       - POSTGRES_PASSWORD=chatapppassword
