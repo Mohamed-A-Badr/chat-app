@@ -4,7 +4,7 @@
 
 A full-stack real-time chat application built with Django and React, featuring secure authentication, WebSocket support, and modern web technologies.
 
-[![Watch the video](https://drive.google.com/file/d/1cYeG715FwKYGxJRcmwAa5QgL0ItP5tQI/view?usp=sharing)](https://drive.google.com/file/d/1ZGHFta0bDX-xGfc8RHqNrhsejPhnyJbt/view?usp=sharing)
+[![Watch Project Preview](https://drive.google.com/file/d/1cYeG715FwKYGxJRcmwAa5QgL0ItP5tQI/view?usp=sharing)](https://drive.google.com/file/d/1ZGHFta0bDX-xGfc8RHqNrhsejPhnyJbt/view?usp=sharing)
 
 ## 🚀 Features
 
